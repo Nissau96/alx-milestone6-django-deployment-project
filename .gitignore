@@ -1,12 +1,25 @@
-# Python
-__pycache__/
-*.pyc
-venv/
-*.env
-
 # Django
 *.log
+*.pot
+*.pyc
+__pycache__/
 db.sqlite3
+media/
+staticfiles/
 
-# IDE / Editor
+# Environment
+.env
+.venv
+venv/
+env/
+
+# IDE
 .vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Celery
+celerybeat-schedule
