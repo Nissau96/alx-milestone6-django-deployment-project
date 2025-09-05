@@ -1,0 +1,32 @@
+services:
+  # Web Service
+  - type: web
+    name: django-deployment-web
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    startCommand: "gunicorn deployment_project.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: deployment_project.settings.production
+      - key: PYTHON_VERSION
+        value: 3.11.6
+
+  # Worker Service
+  - type: worker
+    name: django-deployment-worker
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery -A deployment_project worker --loglevel=info"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: deployment_project.settings.production
+
+  # Redis Service
+  - type: redis
+    name: django-deployment-redis
+    maxmemoryPolicy: allkeys-lru
+
+databases:
+  - name: django-deployment-db
+    databaseName: deployment_db
+    user: deployment_user
